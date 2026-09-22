@@ -6,60 +6,62 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-int isEmpty(Node* top) {
+Node* top = NULL;
+
+int isEmpty() {
     return top == NULL;
 }
 
 int isFull() {
     Node* temp = (Node*)malloc(sizeof(Node));
-    if (temp == NULL)   return 1;
+    if(!temp)   return 1;
     free(temp);
     return 0; 
 }
 
-void push(Node** top, int val) {
+void push(int val) {
     Node* new = (Node*)malloc(sizeof(Node));
     if (new == NULL) {
         printf("Stack Overflow! Heap memory is full.\n");
         return;
     }
     new->val = val;
-    new->next = *top;
-    *top = new;
+    new->next = top;
+    top = new;
     printf("Pushed %d onto the stack.\n", val);
 }
 
-void pop(Node** top) {
-    if(isEmpty(*top)) {
+void pop() {
+    if(isEmpty()) {
         printf("Stack Underflow!");
         return;
     }
-    Node* tem = *top;
+    Node* tem = top;
     printf("%d popped from stack." , tem->val);
-    (*top) = tem->next;
+    top = tem->next;
     free(tem);
 }
 
-void peek(Node* top) {
-    if (isEmpty(top)) {
+void peek() {
+    if (isEmpty()) {
         printf("Stack is empty!\n");
         return;
     }
     printf("Top element: %d\n", top->val);
 }
 
-int size(Node* top) {
+int size() {
     int count = 0;
     Node* temp = top;
-    while (temp != NULL) {
+    while (temp) {
         count++;
         temp = temp->next;
     }
     return count;
 }
 
-void display(Node* top) {
-    if (isEmpty(top)) {
+void display() {
+    if (isEmpty()) {
         printf("Stack is empty!\n");
         return;
     }
@@ -73,14 +75,13 @@ void display(Node* top) {
 }
 
 int main() {
-    Node* top = NULL;
     int choice, val, chc;
 
     printf("--- Linked List Stack ---\n");
     do {
         printf("Enter value to push: ");
         scanf("%d", &val);
-        push(&top, val);
+        push(val);
 
         printf("Do you want to push another element? (1 for Yes / 0 for No): ");
         scanf("%d", &chc);
@@ -96,27 +97,25 @@ int main() {
             case 1:
                 printf("Enter value to push: ");
                 scanf("%d", &val);
-                push(&top, val);
+                push(val);
                 break;
             case 2:
-                pop(&top);
+                pop();
                 break;
             case 3:
-                peek(top);
+                peek();
                 break;
             case 4:
-                if (isEmpty(top)) printf("Stack is EMPTY.\n");
-                else printf("Stack is NOT empty.\n");
+                (isEmpty())?printf("Stack is EMPTY.\n"):printf("Stack is NOT empty.\n");
                 break;
             case 5:
-                if (isFull()) printf("Stack is FULL (Out of memory).\n");
-                else printf("Stack is NOT full (Memory available).\n");
+                (isFull())?printf("Stack is FULL (Out of memory).\n"):printf("Stack is NOT full (Memory available).\n");
                 break;
             case 6:
-                printf("Current Stack Size: %d\n", size(top));
+                printf("Current Stack Size: %d\n", size());
                 break;
             case 7:
-                display(top);
+                display();
                 break;
             case 8:
                 exit(0);
