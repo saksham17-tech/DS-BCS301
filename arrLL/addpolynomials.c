@@ -1,85 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure using typedef for polynomial term
 typedef struct Node {
     int coeff;
     int pow;
     struct Node* next;
 } Node;
 
-// Function to insert a term while keeping powers in descending order
-void insertTerm(Node** head, int coeff, int pow) {
-    Node* new = (Node*)malloc(sizeof(Node));
-    new->coeff = coeff;
-    new->pow = pow;
-    new->next = NULL;
+Node* insert(Node* head, int coeff, int pow) {
+    Node* nn = (Node*)malloc(sizeof(Node));
+    nn->coeff = coeff;
+    nn->pow = pow;
+    nn->next = NULL;
 
-    // If list is empty or new term has highest power
-    if (*head == NULL || (*head)->pow < pow) {
-        new->next = *head;
-        *head = new;
-    } else {
-        Node* temp = *head;
-        // Traverse to find correct position
-        while (temp->next != NULL && temp->next->pow >= pow) {
-            temp = temp->next;
+    if(!head || head->pow<pow) {                // If list is empty or new term has highest power
+        nn->next = head;
+        head = nn;
+    }
+    else {
+        Node* tem = head;
+        while(tem->next!=NULL && tem->next->pow>=pow) tem = tem->next;  // Traverse to find correct position
+        if(tem->pow==pow) {                     // If power already exists, combine coefficients
+            tem->coeff += coeff;
+            free(nn);
         }
-        // If power already exists, combine coefficients
-        if (temp->pow == pow) {
-            temp->coeff += coeff;
-            free(new);
-        } else {
-            new->next = temp->next;
-            temp->next = new;
+        else {
+            nn->next = tem->next;
+            tem->next = nn;
         }
     }
+    return head;
 }
 
-// Function to display polynomial
 void display(Node* head) {
-    if (head == NULL) {
+    if(!head) {
         printf("0\n");
         return;
     }
     Node* temp = head;
-    while (temp != NULL) {
+    while(temp!=NULL) {
         printf("%dx^%d", temp->coeff, temp->pow);
         temp = temp->next;
-        if (temp != NULL && temp->coeff >= 0) {
-            printf(" + ");
-        }
+        if(temp!=NULL && temp->coeff>=0)    printf(" + ");
     }
     printf("\n");
 }
 
-// Function to add two polynomials
 Node* addPolynomials(Node* p1, Node* p2) {
-    Node* result = NULL;
-    while (p1 != NULL && p2 != NULL) {
-        if (p1->pow == p2->pow) {
-            insertTerm(&result, p1->coeff + p2->coeff, p1->pow);
+    Node* res = NULL;
+
+    while(p1!=NULL && p2!=NULL) {
+        if(p1->pow==p2->pow) {
+            res = insert(res, p1->coeff+p2->coeff, p1->pow);
             p1 = p1->next;
             p2 = p2->next;
-        } else if (p1->pow > p2->pow) {
-            insertTerm(&result, p1->coeff, p1->pow);
+        }
+        else if(p1->pow>p2->pow) {
+            res = insert(res, p1->coeff, p1->pow);
             p1 = p1->next;
-        } else {
-            insertTerm(&result, p2->coeff, p2->pow);
+        }
+        else {
+            res = insert(res, p2->coeff, p2->pow);
             p2 = p2->next;
         }
     }
-    // Append remaining terms of p1
-    while (p1 != NULL) {
-        insertTerm(&result, p1->coeff, p1->pow);
+
+    while(p1!=NULL) {
+        res = insert(res, p1->coeff, p1->pow);
         p1 = p1->next;
     }
-    // Append remaining terms of p2
-    while (p2 != NULL) {
-        insertTerm(&result, p2->coeff, p2->pow);
+    
+    while(p2!=NULL) {
+        res = insert(res, p2->coeff, p2->pow);
         p2 = p2->next;
     }
-    return result;
+
+    return res;
 }
 
 int main() {
@@ -91,7 +87,7 @@ int main() {
     do {
         printf("Enter coefficient and power: ");
         scanf("%d %d", &coeff, &pow);
-        insertTerm(&poly1, coeff, pow);
+        poly1 = insert(poly1, coeff, pow);
         printf("Add another term to Poly 1? (1 for Yes / 0 for No): ");
         scanf("%d", &chc);
     } while (chc == 1);
@@ -100,7 +96,7 @@ int main() {
     do {
         printf("Enter coefficient and power: ");
         scanf("%d %d", &coeff, &pow);
-        insertTerm(&poly2, coeff, pow);
+        poly2 = insert(poly2, coeff, pow);
         printf("Add another term to Poly 2? (1 for Yes / 0 for No): ");
         scanf("%d", &chc);
     } while (chc == 1);
