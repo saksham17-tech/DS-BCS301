@@ -5,7 +5,7 @@ int partition(int* arr, int low, int high) {
     int p = arr[high];
     int i=low-1;
     for(int j=low;j<high;j++) {
-        if(arr[j]<p) {
+        if(arr[j]<p) {                          //arr[j]>p for descending
             int temp=arr[++i];
             arr[i]=arr[j];
             arr[j]=temp;
