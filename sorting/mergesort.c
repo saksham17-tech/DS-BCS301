@@ -9,8 +9,8 @@ void conquer(int *arr, int si, int mid, int ei) {
     int x2=mid+1;
     int x=0;
     while(x1<=mid && x2<=ei) {
-        if(arr[x1]<arr[x2]) merged[x++]=arr[x1++];          //arr[x1]>arr[x2] for descending
-        else                merged[x++]=arr[x2++];
+        if(arr[x1]<=arr[x2])    merged[x++]=arr[x1++];          //arr[x1]>arr[x2] for descending
+        else                    merged[x++]=arr[x2++];
     }
     while(x1<=mid)  merged[x++]=arr[x1++];
     while(x2<=ei)   merged[x++]=arr[x2++];
@@ -41,5 +41,6 @@ int main() {
     divide(arr,0,n-1);
     printf("\n");
     display(arr,n);
+    return 0;
 }
 //Time Complexity = O(n logn)
