@@ -4,9 +4,14 @@
 int arr[MAX];
 int n;
 
-void insert(int arr[]) {
+void display() {
+    printf("\n");
+    for(int i=0; i<n; ++i)  printf("%d  ", arr[i]);
+}
+
+void insert() {
     int pos, val;
-    printf("Enter pos and val respv: ");
+    printf("\nEnter pos and val respv: ");
     scanf("%d %d", &pos, &val);
     int j=n-1;
     while(j>=(pos-1)) {
@@ -17,9 +22,9 @@ void insert(int arr[]) {
     n++;
 }
 
-void delete(int arr[]) {
+void delete() {
     int pos;
-    printf("Enter pos: ");
+    printf("\nEnter pos: ");
     scanf("%d", &pos);
     int j=pos-1;
     while(j<n) {
@@ -29,19 +34,31 @@ void delete(int arr[]) {
     n--;
 }
 
-void display(int arr[]) {
-    printf("\n");
-    for(int i=0; i<n; ++i)  printf("%d  ", arr[i]);
+void merge() {
+    int n2;
+    printf("\nEnter size of second array:\n");
+    scanf("%d", &n2);
+    int arr2[n2];
+    printf("Enter %d elements in the array: ",n2);
+    for(int i=0; i<n2; ++i) scanf("%d",&arr2[i]);
+    int res[n+n2];
+    int i=0, j=0, x=0;
+    while(i<n && j<n2)  res[x++] = (arr[i]>arr2[j])?arr2[j++]:arr[i++];
+    while(i<n)  res[x++] = arr[i++];
+    while(j<n2) res[x++] = arr2[j++];
+    printf("\nMerged: ");
+    for(int k=0; k<n+n2; ++k) printf("%d ", res[k]);
 }
 
 int main() {
     printf("Enter size: ");
     scanf("%d", &n);
-    printf("Enter %d elements in array: ",n);
+    printf("Enter %d elements in array:\n",n);
     for(int i=0; i<n; ++i)  scanf("%d", &arr[i]);
-    display(arr);
-    insert(arr);
-    display(arr);
-    delete(arr);
-    display(arr);
+    display();
+    insert();
+    display();
+    delete();
+    display();
+    merge();
 }
