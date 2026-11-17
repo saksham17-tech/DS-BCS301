@@ -9,7 +9,7 @@ typedef struct Node {
 } Node;
 
 Node* tree = NULL;
-int pidx = 0; // Will be initialized to n - 1 (end of post-order array)
+int pidx = 0;
 
 Node* create(int val) {
     Node* nn = (Node*)malloc(sizeof(Node));
@@ -28,7 +28,6 @@ int search(int in[], int start, int end, int val) {
 Node* construct(int post[], int in[], int start, int end) {
     if(start > end)   return NULL;
     
-    // In Post-order, the root is at the current index 'pidx' (starting from the end)
     int rootval = post[pidx--];
     Node* curr = create(rootval);
     
@@ -56,9 +55,8 @@ int main() {
     int post[] = {4, 5, 2, 6, 7, 3, 1};
     int n = sizeof(in) / sizeof(in[0]);
 
-    // Start pidx from the last element of the post-order array
-    pidx = n - 1;
-    tree = construct(post, in, 0, n - 1);
+    pidx = n-1;
+    tree = construct(post, in, 0, n-1);
 
     printf("Constructed Tree Verification (Preorder Traversal):\n");
     preorder(tree);
